@@ -4,6 +4,7 @@
 **/
 import java.util.*;
 import java.lang.*;
+import java.security.spec.EllipticCurve;
 import java.io.*;
 
 public class Parser{
@@ -118,7 +119,7 @@ public class Parser{
 			varDef();
 		}	
 	}
-	
+
 	/**
 		Function varDef: verifies the production <varDef>::=int variable
 	**/
@@ -170,7 +171,26 @@ public class Parser{
 			System.out.println("call function ok!");
 			r=true;			
 		}
+		else if (lexer.getCurrentToken().code == Lexer.VARIABLE){
+			assigment();
+			r = true;
+		}
+		else if (lexer.getCurrentToken().code == Lexer.IF){
+			ifstmt();
+			r = true;
+		}else if (lexer.getCurrentToken().code == Lexer.WHILE){
+			loopWhile();
+			r = true;
+		}
+			
+			
 		return r;
+	}
+
+	public void assigment(){
+		recognizeVariable();
+		recognize(Lexer.ASSIGN);
+		expr();
 	}
 	
 	/**
@@ -198,12 +218,77 @@ public class Parser{
 	public void recognizeVariable(){
 		recognize(Lexer.VARIABLE);
 	}
+
+	public void recognizeConstant(){
+		recognize(Lexer.CONSTANT);
+	}
 	
+	public void factor(){
+		if (lexer.getCurrentToken().code == Lexer.VARIABLE){
+			recognizeVariable();
+		}
+		else if (lexer.getCurrentToken().code == Lexer.CONSTANT)
+			recognizeConstant();
+		else if (lexer.getCurrentToken().code != Lexer.SUM && lexer.getCurrentToken().code != Lexer.MULTIPLY){ 
+			recognize(Lexer.LPAREN);
+			expr();
+			recognize(Lexer.RPAREN);
+		}
+	}
+
+	public void term(){
+		factor();
+
+		while (lexer.getCurrentToken().code == Lexer.MULTIPLY){
+			recognize(Lexer.MULTIPLY);
+			factor();
+		}
+	}
+	public void expr(){
+		term();
+		while (lexer.getCurrentToken().code == Lexer.SUM){
+			recognize(Lexer.SUM);
+			term();
+		}
+	}
+
+	public void condition(){
+		expr();
+
+		if(lexer.getCurrentToken().code == Lexer.EQUALS)
+			recognize(Lexer.EQUALS);
+		else if (lexer.getCurrentToken().code == Lexer.DIFFER)
+			recognize(Lexer.DIFFER);
+
+		expr();
+		
+	}
+
+	public void ifstmt(){
+		recognize(Lexer.IF);
+		recognize(Lexer.LPAREN);
+		condition();
+		recognize(Lexer.RPAREN);
+		statementList();
+		recognize(Lexer.ELSE);
+		statementList();
+		recognize(Lexer.ENDIF);
+	}
+
+	public void loopWhile(){
+		recognize(Lexer.WHILE);
+		recognize(Lexer.LPAREN);
+		condition();
+		recognize(Lexer.RPAREN);
+		statementList();
+		recognize(Lexer.ENDWHILE);
+	}
 	
 	public static void main(String args[])
 	{
+		Scanner sc = new Scanner(System.in);
 		try {
-			String fileName = args[0];
+			String fileName = sc.next();
 			Parser parser = new Parser(fileName);
 				} catch (Exception e)
 		{

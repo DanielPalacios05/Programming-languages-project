@@ -1,0 +1,12 @@
+program
+	def main ( int a int b )
+		int c
+		if ( a == 0 )
+			if ( b == 0 )
+				daniel = daniel + 2
+			else
+				daniel = 2
+		else
+			endif
+	enddef
+endprogram

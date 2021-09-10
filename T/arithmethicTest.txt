@@ -1,0 +1,6 @@
+program
+    def main ( int a int b )
+        int g
+        daniel = ( 2 * 5 ) + 4
+    enddef
+endprogram
