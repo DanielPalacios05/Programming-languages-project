@@ -1,5 +1,5 @@
 program
-	def main ( int a int b )
+def main ( int a int b )
 		int c
 	enddef
 	

@@ -1,0 +1,7 @@
+program
+	def main ( int a int b )
+		int ca
+		daniel == pablo
+		pablo == daniel
+	enddef
+endprogram

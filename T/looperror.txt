@@ -1,0 +1,12 @@
+program
+	def main ( int a int b )
+		int c
+
+		while ( a != 2 + 5 
+			while ( c != 3 )
+			daniel = 2
+			endwhile
+		daniel = capfirst
+		endwhile
+	enddef
+endprogram

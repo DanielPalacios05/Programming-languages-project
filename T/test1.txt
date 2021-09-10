@@ -1,5 +1,21 @@
 program
 	def main ( int a int b )
-		int c
+		int i
+		int acum
+		int j
+
+		read i
+		acum = 0
+		j = 0
+		
+		if ( i == 10 )
+			while ( j != 1 )
+				acum = acum + j * ( i + 1 )
+				j = j + 1
+			endwhile
+		else
+			acum = 1
+		endif
+		print acum
 	enddef
 endprogram

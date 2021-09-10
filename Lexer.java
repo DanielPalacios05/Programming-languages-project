@@ -10,26 +10,37 @@ import java.io.*;
 
 public class Lexer{
 	
+	public static final int[] DIGIT = {0,1,2,3,4,5,6,7,8,9};
+	public static final char[] LETTER = {'a', 'b', 'c', 'd', 'e', 'f','g',
+	'h','i','j','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+	'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+
 	//Define token codes based on the grammar
 	public static final int PROGRAM = 1;
 	public static final int ENDPROGRAM = 2;
 	public static final int DEF = 3;
-	public static final int ENDDEF = 4;
-	public static final int IF = 5;
-	public static final int ELSE = 6;
-	public static final int ENDIF = 7;
+	public static final int ENDDEF = 4; 
+	public static final int IF = 5; // TO DO:
+	public static final int ELSE = 6; // TO DO:
+	public static final int ENDIF = 7; // TO DO:
 	public static final int VARIABLE = 8;
 	public static final int CONSTANT = 9;
-	public static final int EQUALS = 10;
-	public static final int ASSIGN = 11;
+	public static final int EQUALS = 10; // TO DO:
+	public static final int ASSIGN = 11; // TO DO:
 	public static final int LPAREN = 12;
-	public static final int RPAREN = 13;
+	public static final int RPAREN = 31;
 	public static final int INT = 14;
 	public static final int READ = 15;
 	public static final int PRINT = 16;
 	public static final int CALL = 17;
+	public static final int DIFFER = 18; // TO DO:
+	public static final int SUM = 19;
+	public static final int MULTIPLY = 20;
+	public static final int WHILE = 21;
+	public static final int ENDWHILE = 22;
 	public static final int INVALIDTOKEN=98;
 	public static final int EOF = 99;
+
 
 	//fileScanner: (Scanner) to iterate over the source file
 	private Scanner fileScanner;
@@ -75,14 +86,20 @@ public class Lexer{
 		keywordsTable.add(new Token(ELSE, "else", 0));
 		keywordsTable.add(new Token(ENDIF, "endif", 0));
 		keywordsTable.add(new Token(EQUALS, "==", 0));
+		keywordsTable.add(new Token(DIFFER,"!=", 0));
 		keywordsTable.add(new Token(LPAREN, "(", 0));
 		keywordsTable.add(new Token(RPAREN, ")", 0));
 		keywordsTable.add(new Token(INT, "int", 0));
 		keywordsTable.add(new Token(READ, "read", 0));
 		keywordsTable.add(new Token(PRINT, "print", 0));
 		keywordsTable.add(new Token(CALL, "call", 0));
+		keywordsTable.add(new Token(SUM,"+",0));
+		keywordsTable.add(new Token(MULTIPLY,"*",0));
+		keywordsTable.add(new Token(WHILE, "while", 0));
+		keywordsTable.add(new Token(ENDWHILE, "endwhile", 0));
 		keywordsTable.add(new Token(EOF, "EOF", 0));
-		
+		keywordsTable.add(new Token(ASSIGN, "=",0));
+	
 		
 		/** extract each token from the source file **/
 		String tokenText;
@@ -174,6 +191,7 @@ public class Lexer{
 		Token tmpToken;
 		//The token text has not been found
 		int tokenCode = -1;
+
 		//While the iterator can move forward and the token has not been found
 		while ((it.hasNext()) && (tokenCode==-1)){
 			//move the iterator to the next row in the keywordTable
@@ -184,8 +202,23 @@ public class Lexer{
 		}
 		
 		//If the token was not found, it is a variable
-		if (tokenCode ==-1)
-			tokenCode = VARIABLE;
+		if (tokenCode ==-1){
+
+			try {
+				Integer.parseInt(tokenText);   
+				tokenCode = CONSTANT;
+			} catch (NumberFormatException e) {
+				try {
+					Integer.parseInt(String.valueOf(tokenText.charAt(0)));
+					tokenCode = INVALIDTOKEN;
+				} catch (NumberFormatException d) {
+					tokenCode = VARIABLE;
+				}
+			}
+	
+		}
+		
+		// SI ALGO VA MAL tokenCode = VARIABLE
 		
 		//Return the actual token code
 		return tokenCode;
