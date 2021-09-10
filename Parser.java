@@ -286,10 +286,8 @@ public class Parser{
 	
 	public static void main(String args[])
 	{
-		Scanner sc = new Scanner(System.in);
 		try {
-			String fileName = sc.next();
-			Parser parser = new Parser(fileName);
+			Parser parser = new Parser(args[0]);
 				} catch (Exception e)
 		{
 			e.printStackTrace();
